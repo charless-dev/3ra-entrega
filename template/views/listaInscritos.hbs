@@ -1,0 +1,30 @@
+{{>header}}
+
+<section class="container">
+	{{#if message}}
+		{{{message}}}
+	{{/if}}
+	<h1>Cursos disponibles</h1>
+	{{{infoInscritosCursos cursos inscritos }}}
+</section>
+<section class="container">
+	<form action="/inscritos" method="post">
+		<div class="row">
+			<div class="col-12">
+				<div class="form-group">
+                    <label>Seleccione un curso para cambiar su estado a cerrado:</label>
+					<select class="form-control" name="curso">
+						{{{listadoCursos cursos }}}
+					</select>
+				</div>
+			</div>
+		</div>		
+		<div class="row">
+			<div class="col-12">	
+				<button class="btn btn-primary">Cerrar Curso</button>		
+			</div>
+		</div>					
+	</form>
+</section>
+
+{{>footer}}

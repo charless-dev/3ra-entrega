@@ -1,0 +1,61 @@
+{{>header}}
+	
+<section class="container">
+	{{#if message}}
+		{{{message}}}
+	{{/if}}
+	<h1>Registro de usuarios</h1>
+	<p>Ingrese la información en los campos para registrarse.</p>
+	<form action="/registro" method="post">
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Nombre:</label>
+					<input name="nombre" type="text" class="form-control" placeholder="Nombre" required>	
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Documento:</label>
+					<input name="documento" type="text" class="form-control" placeholder="Documento" required>	
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Correo electrónico:</label>
+					<input name="correo" type="email" class="form-control" placeholder="Correo electrónico" required>	
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Password:</label>
+					<input name="password" type="password" class="form-control" placeholder="Password" required>	
+				</div>
+			</div>
+		</div>			
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Teléfono:</label>
+					<input name="telefono" type="text" class="form-control" placeholder="Teléfono" required>	
+				</div>
+			</div>
+			<div class="col-6">
+                <label>Rol:</label>
+				<select class="form-control" name="rol" required>
+					<option>Aspirante</option>
+					<option>Coordinador</option>
+				</select>
+			</div>
+		</div>	
+		<div class="row">
+			<div class="col-12">	
+				<button class="btn btn-primary">Enviar</button>		
+			</div>
+		</div>					
+	</form>
+</section>
+
+{{>footer}}

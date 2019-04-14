@@ -1,0 +1,64 @@
+{{>header}}
+	
+<section class="container">
+	{{#if message}}
+		{{{message}}}
+	{{/if}}
+	<h1>Crear curso</h1>
+	<p>Ingresa la información en los campos para crear un curso.</p>
+	<form action="/crear-curso" method="post">
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Id:</label>
+					<input name="numId" type="text" class="form-control" placeholder="Id" required>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Nombre:</label>
+					<input name="nombre" type="text" class="form-control" placeholder="Nombre" required>	
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Modalidad:</label>
+					<select class="form-control" name="modalidad">
+						<option selected="selected">Seleccionar</option>
+						<option>Virtual</option>
+						<option>Presencial</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Intendisad horaria:</label>
+					<input name="intensidad" type="number" class="form-control" placeholder="Intendisad horaria">
+				</div>
+			</div>
+		</div>			
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Descripción:</label>
+					<textarea name="descripcion" class="form-control" required></textarea>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Valor:</label>
+					<input name="valor" type="number" class="form-control" placeholder="Valor" required>	
+				</div>
+			</div>
+		</div>	
+		<div class="row">
+			<div class="col-12">	
+				<button class="btn btn-primary">Enviar</button>		
+			</div>
+		</div>					
+	</form>
+</section>
+
+{{>footer}}

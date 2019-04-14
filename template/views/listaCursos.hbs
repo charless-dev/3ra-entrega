@@ -1,0 +1,15 @@
+{{>header}}
+
+<section class="container">
+	{{#if message}}
+		{{{message}}}
+	{{/if}}
+	<h1>{{titulo}}</h1>
+	<p>Haga clic en cada curso para desplegar ver mas información.</p>	
+	{{#unless activo}}
+	<p>Para inscribirse en un curso debre registrarse e iniciar sesion.</p>
+	{{/unless}}	
+	{{{listaCursos listado activo objUser }}}
+</section>
+
+{{>footer}}
