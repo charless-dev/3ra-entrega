@@ -82,3 +82,42 @@ hbs.registerHelper('listadoCursos', (listaCursos) => {
 	});
 	return cursos;
 });
+
+
+hbs.registerHelper('listaOfertas',(listado, loggueado, objUser) => {
+	let lista = "<div id='accordion' class='mb-5 mt-4'>";
+	let form = "";	
+	listado.forEach(oferta => {
+		if (loggueado) {
+			form = '<div>'
+					   + '<form method="post" action="/ofertas-empleo">'
+					   + '<input type="hidden" name="documento" value="'+objUser.documento+'">'
+					   + '<input type="hidden" name="nombre" value="'+objUser.nombre+'">'
+					   + '<input type="hidden" name="correo" value="'+objUser.correo+'">'
+					   + '<input type="hidden" name="telefono" value="'+objUser.telefono+'">'
+					   + '<input type="hidden" name="oferta" value="'+oferta.nombre+'">'
+					   + '<button class="btn btn-primary">Postularme</button> '							  
+					   + '</form>'
+					   +'</div>';
+		}
+		lista += '<div class="card">'
+				  +	'<div class="card-header">' 
+					  + '<a class="card-link d-block" data-toggle="collapse" href="#curso'+oferta.numId+'">'
+						  + '<strong>Nombre de la oferta: </strong>'+oferta.nombre
+					  + '</a>'
+				  + '</div>'
+				  + '<div id="curso'+oferta.numId+'" class="collapse" data-parent="#accordion">'
+					  + '<div class="card-body">'
+						  + '<strong>Id de la oferta: </strong>'+oferta.numId+'<br>'
+						  + '<strong>Nombre del curso: </strong>'+oferta.nombre+'<br>'
+						  + '<strong>Descripción: </strong> '+oferta.descripcion+'<br>'
+						  + '<strong>Salario: </strong> '+oferta.salario
+						  + form
+					  + '</div>'
+				  + '</div>'
+			  + '</div>';
+		}
+	);
+	lista += "</div>";
+	return lista;
+});

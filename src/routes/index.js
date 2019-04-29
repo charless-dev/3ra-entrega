@@ -1,4 +1,5 @@
 //Requires
+require('./../config/config');
 require('./../helpers/helpers');
 const express = require('express');
 const app = express();
@@ -8,7 +9,11 @@ const bcrypt = require('bcrypt');
 const Curso = require('./../models/curso');
 const Usuario = require('./../models/usuario');
 const Inscrito = require('./../models/inscrito');
+const Boletin = require('./../models/boletin');
+const Oferta = require('./../models/oferta');
+const InscritoOferta = require('./../models/inscrito-oferta');
 const session = require('express-session');
+const sgMail = require('@sendgrid/mail');
 
 //Paths
 const dirViews = path.join(__dirname,'../../template/views');
@@ -292,6 +297,154 @@ app.post('/ingresar', (req, res) => {
 		});
 	});
 });
+
+app.post('/inscripcion-boletin', (req, res) => {
+	let boletin = new Boletin({
+		email:req.body.email 
+	});
+	boletin.save((err, result) => {
+		if (err) {
+			res.render('inscripcionBoletin', {
+				message: "<div class='alert alert-danger' role='alert'>"+err+"</div>"
+			})			
+		}else{
+			sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+			const msg = {
+				to: req.body.email,
+				from: 'cursostda@gmail.com',
+				subject: 'Inscripción realizada con exito!',
+				text: 'Se ha suscrito con exito al boletín de cursos.'
+			};	
+			sgMail.send(msg);
+			res.render('inscripcionBoletin', {
+				message: "<div class='alert alert-success' role='alert'>El correo "+req.body.email+" se ha suscrito con exito.</div>",
+			});			
+		}
+	});
+});
+
+app.get('/crear-oferta',(req, res) => {
+	if (!req.session.activo) {
+		res.render('ingresar', {
+			message: "<div class='alert alert-danger' role='alert'>Para ingresar a esta página debe estar logueado</div>"
+		});	
+	}	
+	res.render('crearOferta');
+});
+
+app.post('/crear-oferta',(req, res) => {
+	let oferta = new Oferta({
+		numId: req.body.numId,
+		nombre: req.body.nombre,
+		descripcion: req.body.descripcion,
+		salario: req.body.salario,
+	});
+	oferta.save((err, result) => {
+		if (err) {
+			res.render('crearOferta', {
+				message: "<div class='alert alert-danger' role='alert'>"+err+"</div>"
+			})			
+		}else{
+			res.render('crearOferta', {
+				message: "<div class='alert alert-success' role='alert'>Oferta "+req.body.nombre+" creada con exito!</div>"
+			});
+		}
+	});
+});
+
+app.get('/ofertas-empleo',(req, res) => {
+	let usuario = {};
+	if (req.session.activo) {
+		usuario = {
+			documento: req.session.documento,
+			nombre: req.session.nombre,
+			correo: req.session.correo,
+			telefono: req.session.telefono
+		};
+	}
+
+	Oferta.find().exec((err, result) => {
+		if (err) {
+			res.render('listaOfertas', {
+				message: "<div class='alert alert-danger' role='alert'>Ha ocurrido un error.</div>"
+			})
+		}else {
+			res.render('listaOfertas', {
+				titulo: 'Ofertas de empleo',
+				listado: result,
+				activo: req.session.activo,
+				objUser: usuario
+			});			
+		}	
+	});
+
+});
+
+
+app.post('/ofertas-empleo', (req, res) => {
+
+	let usuario = {};
+
+	if (req.session.activo) {
+		usuario = {
+			documento: req.session.documento,
+			nombre: req.session.nombre,
+			correo: req.session.correo,
+			telefono: req.session.telefono
+		};
+	}
+
+	let lista = "";
+
+	Oferta.find().exec((err, resultados) => {
+		lista = resultados;
+	});
+
+	InscritoOferta.findOne({documento: req.body.documento, ofertas: { $in:[req.body.oferta ] } },(err, result) => { 
+		if (err) {
+			res.render('listaOfertas', {
+				message: "<div class='alert alert-danger' role='alert'>Ha ocurrio un error.</div>",
+				listado: lista,
+				activo: req.session.activo,
+				objUser: usuario
+			}) 
+		} else if (!result) {
+			InscritoOferta.findOneAndUpdate({documento: req.body.documento},{ $push: { ofertas: req.body.oferta }}, (err, result) => {
+				if (err) {
+					res.render('listaOfertas', {					
+						message: "<div class='alert alert-danger' role='alert'>Ha ocurrio un error.</div>",
+						listado: lista,
+						activo: req.session.activo,
+						objUser: usuario
+					});	
+				} else if (!result) {
+					let inscritoOferta = new InscritoOferta({
+						documento: req.body.documento,
+						ofertas: [req.body.oferta],
+						nombre: req.body.nombre,
+						correo: req.body.correo,
+						telefono: req.body.telefono					
+					});
+					inscritoOferta.save(inscritoOferta);	
+				}
+				res.render('listaOfertas', {
+					message: "<div class='alert alert-success' role='alert'>Se ha inscrito con exito en la oferta "+req.body.oferta+"!</div>",
+					listado: lista,
+					activo: req.session.activo,
+					objUser: usuario
+				});
+			});
+		} else { 
+			res.render('listaOfertas', {
+				message: "<div class='alert alert-danger' role='alert'>Ya se ha postulado a esta oferta.</div>",
+				listado: lista,
+				activo: req.session.activo,
+				objUser: usuario
+			})				
+		}
+	});
+});
+
 
 app.get('/salir', (req, res) => {
 	req.session.destroy(function(err) {

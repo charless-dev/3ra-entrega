@@ -1,0 +1,46 @@
+{{>header}}
+	
+<section class="container">
+	{{#if message}}
+		{{{message}}}
+	{{/if}}
+	<h1>Crear oferta de empleo</h1>
+	<p>Ingresa la información en los campos para crear una oferta de empleo.</p>
+	<form action="/crear-oferta" method="post">
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Id:</label>
+					<input name="numId" type="text" class="form-control" placeholder="Id" required>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Nombre:</label>
+					<input name="nombre" type="text" class="form-control" placeholder="Nombre" required>	
+				</div>
+			</div>
+		</div>		
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Descripción:</label>
+					<textarea name="descripcion" class="form-control" required></textarea>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+                    <label>Salario:</label>
+					<input name="salario" type="number" class="form-control" placeholder="Salario" required>	
+				</div>
+			</div>
+		</div>	
+		<div class="row">
+			<div class="col-12">	
+				<button class="btn btn-primary">Enviar</button>		
+			</div>
+		</div>					
+	</form>
+</section>
+
+{{>footer}}

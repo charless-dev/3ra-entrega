@@ -3,6 +3,21 @@
 <section class="container text-center">
 	<h1>{{titulo}}</h1>
 	<p>Utilice las opciones del menu navegar en la aplicación.</p>
+	<form action="/inscripcion-boletin" method="post">
+		<h3>Suscribción boletín</h3>
+		<p>Suscribete al boletín de cursos para estar informado de noticias y cursos nuevos.</p>
+		<div class="row">
+			<div class="col-2"></div>
+			<div class="col-4">
+				<div class="form-group">
+					<input name="email" type="email" class="form-control" placeholder="Correo electrónico" required>	
+				</div>
+			</div>
+			<div class="col-4">	
+				<button class="btn btn-primary btn-block">Enviar</button>		
+			</div>
+		</div>							
+	</form>
 </section>
 
 {{>footer}}

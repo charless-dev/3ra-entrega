@@ -4,12 +4,13 @@
   "description": "Entrega 3 diplomado node",
   "main": "node",
   "scripts": {
-    "start":"node src/app.js",
+    "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Carlos agudelo",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.3.1",
